@@ -1,7 +1,7 @@
-# Konva Editor
+# Image Making
+
+一个建议的图片制作工具。待完善中...
+
+[![IZv4i.md.jpg](https://s1.328888.xyz/2022/09/24/IZv4i.md.jpg)](https://imgloc.com/i/IZv4i)
 
 
-### Text Node
-
-- 点击左上角小红点以删除节点
-- 左侧切换到文本，双击文本节点可对文本节点的属性进行操作
