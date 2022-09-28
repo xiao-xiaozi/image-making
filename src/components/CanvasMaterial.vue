@@ -7,7 +7,7 @@
 
   const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
 
-  let activeMaterial = ref("background");
+  let activeMaterial = ref("text");
 
   // 切换选中的类型
   function materialTypeClick(e) {

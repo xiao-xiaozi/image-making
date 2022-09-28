@@ -41,30 +41,22 @@ export function konvaDrawImage(konvaStage, url) {
 export function konvaDrawText(konvaStage, params) {
   const kStore = konvaStore();
   let layer = getStageLayer(konvaStage);
-  let ground = createGround(
-    {
-      x: 10,
-      y: 10,
-      id: uniqueId("d_"),
-      draggable: true,
-    },
-    { x: -1, y: -1, radius: 5 }
-  );
   let textNode = new Konva.Text({
-    x: 0,
-    y: 0,
+    x: 5,
+    y: 5,
     text: "文本信息",
     fontSize: 20,
+    id: uniqueId("text_"),
     fontFamily: params,
     fill: "#07C160",
+    draggable: true,
   });
   textNode.on("dblclick", function (e) {
-    kStore.setActiveText({ ...e.target.attrs, groundId: ground.id() });
+    kStore.setActiveText({ ...e.target.attrs, id: textNode.id() });
   });
-  ground.add(textNode);
-  layer.add(ground);
+  layer.add(textNode);
   return {
-    value: ground,
+    value: textNode,
     name: "文本信息",
   };
 }
