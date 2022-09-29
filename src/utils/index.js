@@ -2,38 +2,32 @@ import Konva from "konva";
 import { uniqueId } from "lodash";
 import konvaStore from "../store/konvaStore";
 
-const deleteCircleName = "deleteCircle";
+// const deleteCircleName = "deleteCircle";
 
 // 往canvas中插入图片
 export function konvaDrawImage(konvaStage, url) {
   return new Promise((resolve) => {
     let layer = getStageLayer(konvaStage);
-    let ground = createGround({
-      x: 10,
-      y: 10,
-      id: uniqueId("img_"),
-      draggable: true,
-    });
     const imageObj = new Image();
     imageObj.onload = function () {
       let kImg = new Konva.Image({
-        x: 3,
-        y: 3,
+        x: 30,
+        y: 50,
         name: "image",
         image: imageObj,
+        draggable: true,
       });
-      ground.add(kImg);
-      layer.add(ground);
+      addToTransformer(konvaStage, kImg); // 初始化时，加旋转缩放
+      kImg.on("click", function () {
+        addToTransformer(konvaStage, kImg); //点击stage会取消旋转缩放展示，点击图片时加载回来
+      });
+      layer.add(kImg);
       resolve({
         name: "image",
-        value: ground,
+        value: kImg,
       });
     };
     imageObj.src = url;
-    // 加缩放操作
-    ground.on("click", function () {
-      addToTransformer(konvaStage, ground);
-    });
   });
 }
 
@@ -140,43 +134,43 @@ export function konvaDrawBackgroundReact(konvaStage, backgroundColor) {
 }
 
 // 图形的删除标记
-function deleteDiagram(config) {
-  let { x, y, radius, fill } = config || {};
-  const circle = new Konva.Circle({
-    x: x || 3,
-    y: y || 3,
-    name: deleteCircleName, // 特殊标记
-    radius: radius || 10,
-    fill: fill || "red",
-    stroke: "#000",
-    strokeWidth: 2,
-  });
-  circle.on("click", function (e) {
-    const ground = e.target.parent;
-    if (ground instanceof Konva.Group) {
-      removeFromTransformer(ground.parent.parent, ground.id());
-      ground.destroy();
-      // 销毁时从图层数据中移除
-      const kStore = getKStore();
-      kStore.removeDiagram(ground.id());
-    }
-    document.body.style.cursor = "default";
-  });
-  circle.on("mouseover", function () {
-    document.body.style.cursor = "pointer";
-  });
-  circle.on("mouseout mouseleave", function () {
-    document.body.style.cursor = "default";
-  });
+// function deleteDiagram(config) {
+//   let { x, y, radius, fill } = config || {};
+//   const circle = new Konva.Circle({
+//     x: x || 3,
+//     y: y || 3,
+//     name: deleteCircleName, // 特殊标记
+//     radius: radius || 10,
+//     fill: fill || "red",
+//     stroke: "#000",
+//     strokeWidth: 2,
+//   });
+//   circle.on("click", function (e) {
+//     const ground = e.target.parent;
+//     if (ground instanceof Konva.Group) {
+//       removeFromTransformer(ground.parent.parent, ground.id());
+//       ground.destroy();
+//       // 销毁时从图层数据中移除
+//       const kStore = getKStore();
+//       kStore.removeDiagram(ground.id());
+//     }
+//     document.body.style.cursor = "default";
+//   });
+//   circle.on("mouseover", function () {
+//     document.body.style.cursor = "pointer";
+//   });
+//   circle.on("mouseout mouseleave", function () {
+//     document.body.style.cursor = "default";
+//   });
 
-  return circle;
-}
+//   return circle;
+// }
 
 // 销毁transformer
-function removeFromTransformer(stage) {
-  let transformer = stage.find("Transformer");
-  if (transformer.length) transformer[0].destroy();
-}
+// function removeFromTransformer(stage) {
+//   let transformer = stage.find("Transformer");
+//   if (transformer.length) transformer[0].destroy();
+// }
 
 // 创建transformer，将元素加入到transformer
 function addToTransformer(stage, node) {
@@ -204,34 +198,34 @@ function addToTransformer(stage, node) {
  * @param {*} deleteCircleConfig 删除小圆点的配置信息
  * @returns
  */
-function createGround(groundConfig, deleteCircleConfig) {
-  const normal = {
-    x: 0,
-    y: 0,
-    id: uniqueId(),
-    draggable: true,
-  };
-  const ground = new Konva.Group(Object.assign(normal, groundConfig));
-  // 鼠标移入时显示删除小圆点
-  ground.on("mouseenter", function () {
-    ground.add(deleteDiagram(deleteCircleConfig));
-  });
-  // 鼠标离开时销毁删除小圆点
-  ground.on("mouseleave", function () {
-    ground.children.forEach((node) => {
-      if (node.attrs.name === deleteCircleName) {
-        node.destroy();
-      }
-    });
-  });
+// function createGround(groundConfig, deleteCircleConfig) {
+//   const normal = {
+//     x: 0,
+//     y: 0,
+//     id: uniqueId(),
+//     draggable: true,
+//   };
+//   const ground = new Konva.Group(Object.assign(normal, groundConfig));
+//   // 鼠标移入时显示删除小圆点
+//   ground.on("mouseenter", function () {
+//     ground.add(deleteDiagram(deleteCircleConfig));
+//   });
+//   // 鼠标离开时销毁删除小圆点
+//   ground.on("mouseleave", function () {
+//     ground.children.forEach((node) => {
+//       if (node.attrs.name === deleteCircleName) {
+//         node.destroy();
+//       }
+//     });
+//   });
 
-  return ground;
-}
+//   return ground;
+// }
 
 // 获取konvaStore
-function getKStore() {
-  return konvaStore();
-}
+// function getKStore() {
+//   return konvaStore();
+// }
 
 function getStageLayer(konvaStage) {
   let layers = konvaStage.getLayers();

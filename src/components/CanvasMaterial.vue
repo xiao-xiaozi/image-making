@@ -1,34 +1,34 @@
 <script setup>
-  import { ref } from "vue";
-  import MaterialBackground from "./MaterialBackground.vue";
-  import MaterialText from "./MaterialText.vue";
-  import LayerInfo from "./LayerInfo.vue";
-  import MaterialImage from "./MaterialImage.vue";
+import { ref } from "vue";
+import MaterialBackground from "./MaterialBackground.vue";
+import MaterialText from "./MaterialText.vue";
+import LayerInfo from "./LayerInfo.vue";
+import MaterialImage from "./MaterialImage.vue";
 
-  const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
+const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
 
-  let activeMaterial = ref("text");
+let activeMaterial = ref("image");
 
-  // 切换选中的类型
-  function materialTypeClick(e) {
-    let { material } = e.target.dataset;
-    activeMaterial.value = material || "";
-  }
+// 切换选中的类型
+function materialTypeClick(e) {
+  let { material } = e.target.dataset;
+  activeMaterial.value = material || "";
+}
 
-  // 背景图片点击处理
-  function materialBackgroundClick(params) {
-    emit("updateBackground", { url: params, bgType: "image" });
-  }
+// 背景图片点击处理
+function materialBackgroundClick(params) {
+  emit("updateBackground", { url: params, bgType: "image" });
+}
 
-  // 背景色更新处理
-  function materialBgColor(params) {
-    emit("updateBackground", { ...params, bgType: "color" });
-  }
+// 背景色更新处理
+function materialBgColor(params) {
+  emit("updateBackground", { ...params, bgType: "color" });
+}
 
-  // 插入文本
-  function textClickFn(params) {
-    emit("insertText", params);
-  }
+// 插入文本
+function textClickFn(params) {
+  emit("insertText", params);
+}
 </script>
 
 <template>
@@ -91,25 +91,25 @@
 </template>
 
 <style lang="scss" scoped>
-  .canvas-material {
-    width: 400px;
-    display: flex;
-    .material-type {
-      width: 80px;
-      text-align: center;
-      border-right: 1px solid #f5f5f5;
-      &__active {
-        color: #333;
-        background-color: #e4efec;
-      }
-      .type-item {
-        padding: 14px 0;
-        cursor: pointer;
-      }
+.canvas-material {
+  width: 400px;
+  display: flex;
+  .material-type {
+    width: 80px;
+    text-align: center;
+    border-right: 1px solid #f5f5f5;
+    &__active {
+      color: #333;
+      background-color: #e4efec;
     }
-    .material-content {
-      flex: 1;
-      overflow-y: auto;
+    .type-item {
+      padding: 14px 0;
+      cursor: pointer;
     }
   }
+  .material-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
 </style>

@@ -31,6 +31,9 @@ const konvaStore = defineStore("layerDiagram", {
       if (this.currentActive) {
         this.removeDiagram(this.currentActive.id());
         this.currentActive.destroy();
+        // 图片可能开启了缩放旋转，删除图片时一并销毁transformer
+        let transformer = this.konvaInstance.find("Transformer");
+        if (transformer.length) transformer[0].destroy();
         this.currentActive = null;
       }
     },
