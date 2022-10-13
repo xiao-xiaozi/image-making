@@ -47,6 +47,7 @@ export function konvaDrawText(konvaStage, params) {
   });
   textNode.on("dblclick", function (e) {
     kStore.setActiveText({ ...e.target.attrs, id: textNode.id() });
+    kStore.setActiveMaterial("text"); // 双击选中文本进行编辑时，将左侧菜单切换到文本
   });
   layer.add(textNode);
   return {

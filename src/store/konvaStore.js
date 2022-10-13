@@ -7,6 +7,7 @@ const konvaStore = defineStore("layerDiagram", {
       konvaInstance: null, // konva 实例
       diagramArray: [],
       currentActive: null, // 当前konva点击选中的图形
+      activeMaterial: "text", // 当前激活的左侧菜单
       // 当前选中的文本
       activeText: {
         fill: "#ffffff",
@@ -88,6 +89,10 @@ const konvaStore = defineStore("layerDiagram", {
         fontSize: 16,
         id: null,
       };
+    },
+    // 设置当前激活的左侧菜单
+    setActiveMaterial(val) {
+      this.activeMaterial = val;
     },
   },
 });
