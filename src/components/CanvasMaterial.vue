@@ -7,7 +7,7 @@ import MaterialImage from "./MaterialImage.vue";
 
 const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
 
-let activeMaterial = ref("image");
+let activeMaterial = ref("text");
 
 // 切换选中的类型
 function materialTypeClick(e) {
@@ -34,12 +34,12 @@ function textClickFn(params) {
 <template>
   <div class="canvas-material">
     <div class="material-type" @click="materialTypeClick">
-      <div
+      <!-- <div
         class="type-item"
         data-material="template"
         :class="activeMaterial == 'template' ? 'material-type__active' : ''">
         模板
-      </div>
+      </div> -->
       <div
         class="type-item"
         data-material="text"
@@ -52,12 +52,12 @@ function textClickFn(params) {
         data-material="image">
         图片
       </div>
-      <div
+      <!-- <div
         class="type-item"
         data-material="diagram"
         :class="activeMaterial == 'diagram' ? 'material-type__active' : ''">
         图形
-      </div>
+      </div> -->
       <div
         class="type-item"
         data-material="background"
