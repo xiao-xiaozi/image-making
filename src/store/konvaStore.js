@@ -12,7 +12,7 @@ const konvaStore = defineStore("layerDiagram", {
         fill: "#ffffff",
         fontFamily: "",
         text: "",
-        fontSize: 0,
+        fontSize: 16,
         id: null,
       },
     };
@@ -77,6 +77,17 @@ const konvaStore = defineStore("layerDiagram", {
       if (textNode && textNode.value instanceof Konva.Text) {
         textNode.value.setAttr(attr, value);
       }
+      // 更新值
+      this.activeText[attr] = value;
+    },
+    resetActiveText() {
+      this.activeText = {
+        fill: "#ffffff",
+        fontFamily: "",
+        text: "",
+        fontSize: 16,
+        id: null,
+      };
     },
   },
 });

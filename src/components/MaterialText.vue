@@ -1,13 +1,16 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import konvaStore from "@/store/konvaStore.js";
 import { debounce } from "lodash";
 
 const emit = defineEmits(["textClick"]);
 const kStore = konvaStore();
 
-const activeText = kStore.activeText;
-
+const activeText = computed(() => kStore.activeText);
+const showInsertTextBtn = computed(() => {
+  let { text, id } = kStore.activeText;
+  return text && !id;
+});
 const fontFamilyArray = reactive([
   {
     value: "STHupo",
@@ -52,18 +55,23 @@ function fontSizeChange(e) {
   kStore.setTextAttr("fontSize", Number(e.target.value));
 }
 
-function fontColorChange(e) {
-  kStore.setTextAttr("fill", e.target.value);
-}
+const fontColorChange = debounce(
+  (e) => {
+    kStore.setTextAttr("fill", e.target.value);
+  },
+  500,
+  { leading: true, trailing: false }
+);
 
-function textChange(e) {
+const textChange = debounce((e) => {
   kStore.setTextAttr("text", e.target.value);
-}
+}, 1000);
 
 // 插入文本
 const fontFamilyClick = debounce(
-  (e) => {
-    emit("textClick", e.target.dataset.fontfamily);
+  () => {
+    emit("textClick", kStore.activeText);
+    kStore.resetActiveText();
   },
   500,
   { leading: true, trailing: false }
@@ -92,24 +100,26 @@ const fontFamilyClick = debounce(
           @change="fontSizeChange"
           id="fontS" />
       </label>
-      <label for="fontC" class="text-attr">
-        颜色
-        <input
-          type="color"
-          @input="fontColorChange"
-          :value="activeText.fill"
-          id="fontC" />
-      </label>
+      <div class="text-attr">
+        <label for="fontC">
+          颜色
+          <input
+            type="color"
+            @input="fontColorChange"
+            :value="activeText.fill"
+            id="fontC" />
+        </label>
+      </div>
       <!-- <label for="text-content"> -->
       <textarea
         rows="5"
         class="text-textarea"
         :value="activeText.text"
-        @change="textChange"
+        @input="textChange"
         id="text-content" />
       <!-- </label> -->
     </div>
-    <div class="material-text__content" @click="fontFamilyClick">
+    <!-- <div class="material-text__content" @click="fontFamilyClick">
       <p class="fontFamily fontFamily-1" data-fontFamily="STHupo">华文琥珀</p>
       <p class="fontFamily fontFamily-2" data-fontFamily="SimSun">宋体</p>
       <p class="fontFamily fontFamily-3" data-fontFamily="SimHei">黑体</p>
@@ -118,7 +128,13 @@ const fontFamilyClick = debounce(
       <p class="fontFamily fontFamily-6" data-fontFamily="LiSu">隶书</p>
       <p class="fontFamily fontFamily-7" data-fontFamily="STCaiyun">华文彩云</p>
       <p class="fontFamily fontFamily-8" data-fontFamily="STLiti">华文隶书</p>
-    </div>
+    </div> -->
+    <button
+      class="insertText-btn"
+      :disabled="!showInsertTextBtn"
+      @click="fontFamilyClick">
+      插入文本
+    </button>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -161,6 +177,9 @@ const fontFamilyClick = debounce(
   .text-textarea {
     margin: 10px 0 10px 10px;
     resize: none;
+  }
+  .insertText-btn {
+    margin-left: 10px;
   }
 }
 </style>

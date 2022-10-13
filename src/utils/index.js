@@ -38,11 +38,11 @@ export function konvaDrawText(konvaStage, params) {
   let textNode = new Konva.Text({
     x: 5,
     y: 5,
-    text: "文本信息",
-    fontSize: 20,
+    text: params.text || "文本信息",
+    fontSize: params.fontSize || 16,
     id: uniqueId("text_"),
-    fontFamily: params,
-    fill: "#07C160",
+    fontFamily: params.fontFamily || "SimHei",
+    fill: params.fill || "#000",
     draggable: true,
   });
   textNode.on("dblclick", function (e) {
