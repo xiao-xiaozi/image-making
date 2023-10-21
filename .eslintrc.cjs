@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ["eslint:recommended", "plugin:vue/vue3-essential", "prettier"],
+  extends: ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
   overrides: [],
   parserOptions: {
     ecmaVersion: "latest",
@@ -12,8 +12,48 @@ module.exports = {
   },
   plugins: ["vue"],
   rules: {
-    quotes: ["error", "double"],
-    semi: ["error", "always"],
-    "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "vue/max-attributes-per-line": ["warn", { singleline: 3, multiline: 1, }],
+    "vue/first-attribute-linebreak": ["warn", {
+      "singleline": "ignore",
+      "multiline": "below"
+    }],
+    "vue/html-closing-bracket-newline": ["error", {
+      "singleline": "never",
+      "multiline": "never"
+    }],
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/html-indent": ["error", 2, {
+      attribute: 1,
+      baseIndent: 1,
+      closeBracket: 0,
+      alignAttributesVertically: true,
+      ignores: [],
+    }],
+    "key-spacing": [
+      2,
+      {
+        beforeColon: false,
+        afterColon: true, 
+      }
+    ],
+    "object-curly-newline": ["error", {
+      "ObjectExpression": { "multiline": true, "minProperties": 3 },
+      "ObjectPattern": { "multiline": true, "minProperties": 3 },
+      "ImportDeclaration": "never",
+      "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+    }],
+    "object-curly-spacing": [
+      2,
+      "always",
+      { objectsInObjects: false, },
+    ],
+    "object-shorthand": ["error", "always"],
+    "indent": [
+      2,
+      2,
+      { SwitchCase: 1 },
+    ],
   },
 };

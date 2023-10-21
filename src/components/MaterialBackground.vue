@@ -1,40 +1,40 @@
 <script setup>
-  import backgroundData from "@/assets/template";
-  import { reactive, ref } from "vue";
-  import { debounce } from "lodash";
+import backgroundData from "@/assets/template";
+import { reactive, ref } from "vue";
+import { debounce } from "lodash";
 
-  const emit = defineEmits(["backgroundColor", "materialBackground"]);
+const emit = defineEmits(["backgroundColor", "materialBackground"]);
 
-  let backgroundDataReactive = reactive(backgroundData);
+let backgroundDataReactive = reactive(backgroundData);
 
-  let backgroundColor = ref("#ffffff");
+let backgroundColor = ref("#ffffff");
 
-  // 选择本地图片
-  function imageChoose(e) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      // e.target.result就是该文件的完整Base64 Data-URI
-      backgroundDataReactive.unshift(e.target.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  }
+// 选择本地图片
+function imageChoose(e) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    // e.target.result就是该文件的完整Base64 Data-URI
+    backgroundDataReactive.unshift(e.target.result);
+  };
+  reader.readAsDataURL(e.target.files[0]);
+}
 
-  const colorInput = debounce(() => {
-    let ele = document.getElementById("bg-color");
-    emit("backgroundColor", { color: ele.value });
-  }, 500);
+const colorInput = debounce(() => {
+  let ele = document.getElementById("bg-color");
+  emit("backgroundColor", { color: ele.value });
+}, 500);
 </script>
 <template>
   <div class="material-background">
     <div class="choose-local-image">
-      <input type="file" @input="imageChoose" accept="image/*" />
+      <input type="file" accept="image/*" @input="imageChoose" />
     </div>
     <div class="background-color">
       <input
-        type="color"
         id="bg-color"
-        @input="colorInput"
-        :value="backgroundColor" />
+        type="color"
+        :value="backgroundColor"
+        @input="colorInput" />
     </div>
     <img
       v-for="url in backgroundDataReactive"
@@ -42,8 +42,8 @@
       :src="url"
       alt="item.name"
       :data-template="url"
-      @click="$emit('materialBackground', url)"
-      class="material-background__item" />
+      class="material-background__item"
+      @click="$emit('materialBackground', url)" />
   </div>
 </template>
 <style lang="scss" scoped>

@@ -77,11 +77,11 @@ function textClickFn(params) {
     <div class="material-content">
       <MaterialBackground
         v-show="activeMaterial === 'background'"
-        @backgroundColor="materialBgColor"
-        @materialBackground="materialBackgroundClick" />
+        @background-color="materialBgColor"
+        @material-background="materialBackgroundClick" />
       <MaterialText
         v-show="activeMaterial === 'text'"
-        @textClick="textClickFn" />
+        @text-click="textClickFn" />
       <LayerInfo v-show="activeMaterial === 'layer'" />
       <!-- <MaterialImage v-show="activeMaterial === 'image'" /> -->
       <MaterialImage v-show="activeMaterial === 'image'" />

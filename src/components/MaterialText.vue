@@ -95,28 +95,28 @@ const fontFamilyClick = debounce(
       <label for="fontS" class="text-attr">
         大小
         <input
-          type="number"
+          id="fontS"
           v-model.number="activeText.fontSize"
-          @change="fontSizeChange"
-          id="fontS" />
+          type="number"
+          @change="fontSizeChange" />
       </label>
       <div class="text-attr">
         <label for="fontC">
           颜色
           <input
+            id="fontC"
             type="color"
-            @input="fontColorChange"
             :value="activeText.fill"
-            id="fontC" />
+            @input="fontColorChange" />
         </label>
       </div>
       <!-- <label for="text-content"> -->
       <textarea
+        id="text-content"
         rows="5"
         class="text-textarea"
         :value="activeText.text"
-        @input="textChange"
-        id="text-content" />
+        @input="textChange" />
       <!-- </label> -->
     </div>
     <!-- <div class="material-text__content" @click="fontFamilyClick">

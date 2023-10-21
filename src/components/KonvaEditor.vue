@@ -4,11 +4,9 @@ import { onMounted, ref, computed } from "vue";
 import { debounce } from "lodash";
 import CanvasMaterial from "./CanvasMaterial.vue";
 import konvaStore from "../store/konvaStore";
-import {
-  konvaDrawBackgroundImage,
+import { konvaDrawBackgroundImage,
   konvaDrawBackgroundReact,
-  konvaDrawText,
-} from "@/utils";
+  konvaDrawText, } from "@/utils";
 
 const kStore = konvaStore();
 
@@ -79,7 +77,7 @@ function saveToImage() {
     quality: 1,
     // mimeType:'image/jpeg',
     pixelRatio: 3,
-    callback: function (dataUrl) {
+    callback (dataUrl) {
       downloadURI(dataUrl, "konva.png");
     },
   });
@@ -94,37 +92,39 @@ function saveToImage() {
     Reflect.deleteProperty(window, link);
   }
 }
+
+
 </script>
 
 <template>
   <div class="main-container">
     <CanvasMaterial
-      @insertText="insertTextFn"
-      @updateBackground="updateBackground" />
+      @insert-text="insertTextFn"
+      @update-background="updateBackground" />
     <div class="konva-editor">
       <div class="konva-editor__header">
         <div class="stage-wh">
           <input
+            id="stageWidth"
             type="number"
             :value="stageWidth"
-            id="stageWidth"
             class="stage-width-height"
             @change="stageWidthChange" />
           *
           <input
-            type="number"
-            @change="stageHeightChange"
             id="stageHeight"
+            type="number"
             class="stage-width-height"
-            :value="stageHeight" />
+            :value="stageHeight"
+            @change="stageHeightChange" />
         </div>
-        <button @click="saveToImage" class="save-btn">导出为图片</button>
+        <button class="save-btn" @click="saveToImage">导出为图片</button>
         <div class="header-right">
           <span
             :disabled="!currentActive"
-            @click="kStore.destroyDiagram"
             class="iconfont icon-delete"
-            :class="!currentActive ? '' : 'icon-delete-active'"></span>
+            :class="!currentActive ? '' : 'icon-delete-active'"
+            @click="kStore.destroyDiagram"></span>
         </div>
       </div>
       <div class="konva-editor__content">
