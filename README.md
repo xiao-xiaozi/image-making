@@ -5,3 +5,19 @@
 [![IZv4i.md.jpg](https://s1.328888.xyz/2022/09/24/IZv4i.md.jpg)](https://imgloc.com/i/IZv4i)
 
 
+
+
+
+
+
+
+
+
+
+
+
+### Todo
+
+- [ ] 将`konvaStore`中的konva实例移除，通过单例模式实现。(避免响应式追踪一整个konva实例)
+
+- [ ] 将左侧功能区对应的功能写入各个功能组件，取消组件层层事件传递到`KonvaEditor`组件进行处理。（例如：`MaterialText`组件）
