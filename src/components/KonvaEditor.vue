@@ -3,17 +3,17 @@ import Konva from "konva";
 import { onMounted, ref, computed } from "vue";
 import { debounce } from "lodash";
 import CanvasMaterial from "./CanvasMaterial.vue";
-import konvaStore from "../store/konvaStore";
+import useKonvaStore from "../store/konvaStore";
 import { konvaDrawBackgroundImage,
   konvaDrawBackgroundReact,
   konvaDrawText, } from "@/utils";
 
-const kStore = konvaStore();
+const konvaStore = useKonvaStore();
 
-let konvaInstance = computed(() => kStore.konvaInstance); // konva实例
+let konvaInstance = computed(() => konvaStore.konvaInstance); // konva实例
 let stageWidth = ref(413);
 let stageHeight = ref(582);
-const currentActive = computed(() => kStore.currentActive);
+const currentActive = computed(() => konvaStore.currentActive);
 
 onMounted(() => {
   initKonva();
@@ -28,15 +28,15 @@ function initKonva() {
   let layer = new Konva.Layer();
   kInstance.add(layer);
   kInstance.on("click", function (e) {
-    kStore.setCurrentActive(null);
+    konvaStore.setCurrentActive(null);
     if (e.target instanceof Konva.Stage) return;
     if (e.target instanceof Konva.Rect) {
       let { attrs } = e.target;
       if (attrs.name === "materialBackground") return;
     }
-    kStore.setCurrentActive(e.target);
+    konvaStore.setCurrentActive(e.target);
   });
-  kStore.setKonvaInstance(kInstance);
+  konvaStore.setKonvaInstance(kInstance);
 }
 
 // 修改画布宽度
@@ -54,7 +54,7 @@ const stageHeightChange = debounce(function () {
 // 更新背景
 async function updateBackground(params) {
   // 移除原背景
-  kStore.removeBackground("materialBackground");
+  konvaStore.removeBackground("materialBackground");
   let result = null;
   if (params.bgType === "image") {
     result = await konvaDrawBackgroundImage(konvaInstance.value, params.url);
@@ -62,13 +62,13 @@ async function updateBackground(params) {
     result = konvaDrawBackgroundReact(konvaInstance.value, params.color);
   }
   // 加进图层
-  kStore.pushDiagram(result);
+  konvaStore.pushDiagram(result);
 }
 
 // 绘制文本
 function insertTextFn(params) {
   let result = konvaDrawText(konvaInstance.value, params);
-  kStore.unshiftDiagram(result);
+  konvaStore.unshiftDiagram(result);
 }
 
 // 将画布导出为图片
@@ -129,7 +129,7 @@ function saveToImage() {
             title="删除选中的图形"
             :disabled="!currentActive"
             :class="!currentActive ? '' : 'icon-delete-active'"
-            @click="kStore.destroyDiagram"></span>
+            @click="konvaStore.destroyDiagram"></span>
         </div>
       </div>
       <div class="konva-editor__content">

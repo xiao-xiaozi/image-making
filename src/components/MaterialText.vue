@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, computed } from "vue";
-import konvaStore from "@/store/konvaStore.js";
+import useKonvaStore from "@/store/konvaStore.js";
 import { debounce } from "lodash";
 
 const emit = defineEmits(["textClick"]);
-const kStore = konvaStore();
+const konvaStore = useKonvaStore();
 
-const activeText = computed(() => kStore.activeText);
+const activeText = computed(() => konvaStore.activeText);
 const showInsertTextBtn = computed(() => {
-  let { text, id } = kStore.activeText;
+  let { text, id } = konvaStore.activeText;
   return text && !id;
 });
 const fontFamilyArray = reactive([
@@ -48,30 +48,30 @@ const fontFamilyArray = reactive([
 
 // 更新字体
 function fontFamilyChange(e) {
-  kStore.setTextAttr("fontFamily", e.target.value);
+  konvaStore.setTextAttr("fontFamily", e.target.value);
 }
 
 function fontSizeChange(e) {
-  kStore.setTextAttr("fontSize", Number(e.target.value));
+  konvaStore.setTextAttr("fontSize", Number(e.target.value));
 }
 
 const fontColorChange = debounce(
   (e) => {
-    kStore.setTextAttr("fill", e.target.value);
+    konvaStore.setTextAttr("fill", e.target.value);
   },
   500,
   { leading: true, trailing: false }
 );
 
 const textChange = debounce((e) => {
-  kStore.setTextAttr("text", e.target.value);
+  konvaStore.setTextAttr("text", e.target.value);
 }, 1000);
 
 // 插入文本
 const fontFamilyClick = debounce(
   () => {
-    emit("textClick", kStore.activeText);
-    kStore.resetActiveText();
+    emit("textClick", konvaStore.activeText);
+    konvaStore.resetActiveText();
   },
   500,
   { leading: true, trailing: false }

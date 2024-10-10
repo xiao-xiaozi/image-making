@@ -4,18 +4,18 @@ import MaterialBackground from "./MaterialBackground.vue";
 import MaterialText from "./MaterialText.vue";
 import LayerInfo from "./LayerInfo.vue";
 import MaterialImage from "./MaterialImage.vue";
-import konvaStore from "@/store/konvaStore.js";
+import useKonvaStore from "@/store/konvaStore.js";
 
 const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
 
-let kStore = konvaStore();
+let konvaStore = useKonvaStore();
 
-let activeMaterial = computed(() => kStore.activeMaterial);
+let activeMaterial = computed(() => konvaStore.activeMaterial);
 
 // 切换选中的类型
 function materialTypeClick(e) {
   let { material } = e.target.dataset;
-  kStore.setActiveMaterial(material);
+  konvaStore.setActiveMaterial(material);
 }
 
 // 背景图片点击处理

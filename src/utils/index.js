@@ -1,6 +1,6 @@
 import Konva from "konva";
 import { uniqueId } from "lodash";
-import konvaStore from "../store/konvaStore";
+import useKonvaStore from "../store/konvaStore";
 
 // const deleteCircleName = "deleteCircle";
 
@@ -33,7 +33,7 @@ export function konvaDrawImage(konvaStage, url) {
 
 // 往canvas中插入文本
 export function konvaDrawText(konvaStage, params) {
-  const kStore = konvaStore();
+  const kStore = useKonvaStore();
   let layer = getStageLayer(konvaStage);
   let textNode = new Konva.Text({
     x: 5,

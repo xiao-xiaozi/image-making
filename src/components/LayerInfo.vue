@@ -1,10 +1,10 @@
 <script setup>
 import { computed } from "vue";
-import konvaStore from "../store/konvaStore";
+import useKonvaStore from "../store/konvaStore";
 
-const kStore = konvaStore();
+const konvaStore = useKonvaStore();
 
-const diagramArray = computed(() => kStore.diagramArray);
+const diagramArray = computed(() => konvaStore.diagramArray);
 </script>
 <template>
   <div class="diagram-layer">

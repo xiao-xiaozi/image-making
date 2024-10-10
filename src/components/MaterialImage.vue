@@ -1,12 +1,12 @@
 <script setup>
-import konvaStore from "../store/konvaStore";
+import useKonvaStore from "../store/konvaStore";
 import { konvaDrawImage } from "@/utils/index";
 import windImage from "@/assets/image/wind.png";
 import sunImage from "@/assets/image/sun.png";
 import cloudyImage from "@/assets/image/cloudy.png";
 import { reactive } from "vue";
 import { debounce } from "lodash";
-const kStore = konvaStore();
+const konvaStore = useKonvaStore();
 
 let imageArray = reactive([windImage, sunImage, cloudyImage]);
 // 往canvas中插入图片
@@ -14,10 +14,10 @@ const imgClick = debounce(
   async (e) => {
     let { dataset: { index }, } = e.target;
     let result = await konvaDrawImage(
-      kStore.konvaInstance,
+      konvaStore.konvaInstance,
       imageArray[index]
     );
-    kStore.unshiftDiagram(result);
+    konvaStore.unshiftDiagram(result);
   },
   500,
   { leading: true, trailing: false }

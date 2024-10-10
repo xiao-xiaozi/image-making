@@ -1,7 +1,7 @@
 import Konva from "konva";
 import { defineStore, acceptHMRUpdate } from "pinia";
 
-const konvaStore = defineStore("layerDiagram", {
+const useKonvaStore = defineStore("layerDiagram", {
   state: () => {
     return {
       konvaInstance: null, // konva 实例
@@ -98,7 +98,7 @@ const konvaStore = defineStore("layerDiagram", {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(konvaStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useKonvaStore, import.meta.hot));
 }
 
-export default konvaStore;
+export default useKonvaStore;
