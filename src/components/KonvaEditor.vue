@@ -45,13 +45,13 @@ function initKonva() {
 const stageWidthChange = debounce(function () {
   const stageWidthEle = document.getElementById("stageWidth");
   konvaInstance.value.setAttr("width", +stageWidthEle.value);
-}, 2000);
+}, 500);
 
 // 修改画布高度
 const stageHeightChange = debounce(function () {
   const stageHeightEle = document.getElementById("stageHeight");
   konvaInstance.value.setAttr("height", +stageHeightEle.value);
-}, 2000);
+}, 500);
 
 // 更新背景
 async function updateBackground(params) {
@@ -104,26 +104,31 @@ function saveToImage() {
     <div class="konva-editor">
       <div class="konva-editor__header">
         <div class="stage-wh">
-          <input
+          <label>宽度
+            <input
             type="number"
             :value="stageWidth"
             id="stageWidth"
             class="stage-width-height"
             @change="stageWidthChange" />
-          *
-          <input
+          </label>
+          <label>
+            高度
+            <input
             type="number"
             @change="stageHeightChange"
             id="stageHeight"
             class="stage-width-height"
             :value="stageHeight" />
+          </label>
         </div>
-        <button @click="saveToImage" class="save-btn">导出为图片</button>
         <div class="header-right">
+          <button @click="saveToImage" class="save-btn">导出</button>
           <span
-            :disabled="!currentActive"
             @click="kStore.destroyDiagram"
             class="iconfont icon-delete"
+            title="删除选中的图形"
+            :disabled="!currentActive"
             :class="!currentActive ? '' : 'icon-delete-active'"></span>
         </div>
       </div>
@@ -143,6 +148,9 @@ function saveToImage() {
     overflow: hidden;
     &__header {
       height: 50px;
+      line-height:50px;
+      padding-left:20px;
+      padding-right:20px;
       background-color: #fcfcfc;
       position: relative;
       .stage-wh {
@@ -150,13 +158,12 @@ function saveToImage() {
       }
       .save-btn {
         display: inline-block;
-        width: 100px;
-        height: 26px;
+        margin-right:10px;
       }
       .header-right {
         position: absolute;
         right: 20px;
-        top: 10px;
+        top: 0;
         .icon-delete {
           font-size: 22px;
           color: #ccc;
