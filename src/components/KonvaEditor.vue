@@ -4,13 +4,16 @@ import { onMounted, ref, computed } from "vue";
 import { debounce } from "lodash";
 import CanvasMaterial from "./CanvasMaterial.vue";
 import useKonvaStore from "../store/konvaStore";
-import { konvaDrawBackgroundImage,
+import { 
+  konvaDrawBackgroundImage,
   konvaDrawBackgroundReact,
   konvaDrawText, } from "@/utils";
+import { createKonva } from "@/utils/konvaInstance"
+
 
 const konvaStore = useKonvaStore();
 
-let konvaInstance = computed(() => konvaStore.konvaInstance); // konva实例
+let konvaInstance = null // konva实例
 let stageWidth = ref(413);
 let stageHeight = ref(582);
 const currentActive = computed(() => konvaStore.currentActive);
@@ -20,14 +23,15 @@ onMounted(() => {
 });
 
 function initKonva() {
-  const kInstance = new Konva.Stage({
+  konvaInstance = createKonva({
     container: "konvaEditor-container",
     width: stageWidth.value,
     height: stageHeight.value,
-  });
+  })
+
   let layer = new Konva.Layer();
-  kInstance.add(layer);
-  kInstance.on("click", function (e) {
+  konvaInstance.add(layer);
+  konvaInstance.on("click", function (e) {
     konvaStore.setCurrentActive(null);
     if (e.target instanceof Konva.Stage) return;
     if (e.target instanceof Konva.Rect) {
@@ -36,19 +40,18 @@ function initKonva() {
     }
     konvaStore.setCurrentActive(e.target);
   });
-  konvaStore.setKonvaInstance(kInstance);
 }
 
 // 修改画布宽度
 const stageWidthChange = debounce(function () {
   const stageWidthEle = document.getElementById("stageWidth");
-  konvaInstance.value.setAttr("width", +stageWidthEle.value);
+  konvaInstance.setAttr("width", +stageWidthEle.value);
 }, 500);
 
 // 修改画布高度
 const stageHeightChange = debounce(function () {
   const stageHeightEle = document.getElementById("stageHeight");
-  konvaInstance.value.setAttr("height", +stageHeightEle.value);
+  konvaInstance.setAttr("height", +stageHeightEle.value);
 }, 500);
 
 // 更新背景
@@ -57,9 +60,9 @@ async function updateBackground(params) {
   konvaStore.removeBackground("materialBackground");
   let result = null;
   if (params.bgType === "image") {
-    result = await konvaDrawBackgroundImage(konvaInstance.value, params.url);
+    result = await konvaDrawBackgroundImage(konvaInstance, params.url);
   } else if (params.bgType === "color") {
-    result = konvaDrawBackgroundReact(konvaInstance.value, params.color);
+    result = konvaDrawBackgroundReact(konvaInstance, params.color);
   }
   // 加进图层
   konvaStore.pushDiagram(result);
@@ -67,13 +70,13 @@ async function updateBackground(params) {
 
 // 绘制文本
 function insertTextFn(params) {
-  let result = konvaDrawText(konvaInstance.value, params);
+  let result = konvaDrawText(konvaInstance, params);
   konvaStore.unshiftDiagram(result);
 }
 
 // 将画布导出为图片
 function saveToImage() {
-  konvaInstance.value.toDataURL({
+  konvaInstance.toDataURL({
     quality: 1,
     // mimeType:'image/jpeg',
     pixelRatio: 3,

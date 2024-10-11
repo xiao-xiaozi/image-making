@@ -6,6 +6,8 @@ import sunImage from "@/assets/image/sun.png";
 import cloudyImage from "@/assets/image/cloudy.png";
 import { reactive } from "vue";
 import { debounce } from "lodash";
+import getKonvaInstance from "@/utils/konvaInstance";
+
 const konvaStore = useKonvaStore();
 
 let imageArray = reactive([windImage, sunImage, cloudyImage]);
@@ -14,7 +16,7 @@ const imgClick = debounce(
   async (e) => {
     let { dataset: { index }, } = e.target;
     let result = await konvaDrawImage(
-      konvaStore.konvaInstance,
+      getKonvaInstance(),
       imageArray[index]
     );
     konvaStore.unshiftDiagram(result);

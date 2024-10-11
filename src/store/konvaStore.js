@@ -4,7 +4,6 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 const useKonvaStore = defineStore("layerDiagram", {
   state: () => {
     return {
-      konvaInstance: null, // konva 实例
       diagramArray: [],
       currentActive: null, // 当前konva点击选中的图形
       activeMaterial: "text", // 当前激活的左侧菜单
@@ -19,10 +18,6 @@ const useKonvaStore = defineStore("layerDiagram", {
     };
   },
   actions: {
-    // konva实例
-    setKonvaInstance(params) {
-      this.konvaInstance = params;
-    },
     // konva.stage点击选中的图形
     setCurrentActive(value) {
       this.currentActive = value;
