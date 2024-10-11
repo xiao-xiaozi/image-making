@@ -23,12 +23,12 @@ const useKonvaStore = defineStore("layerDiagram", {
       this.currentActive = value;
     },
     // 销毁当前点击选中的图形
-    destroyDiagram() {
+    destroyDiagram(konvaInstance) {
       if (this.currentActive) {
         this.removeDiagram(this.currentActive.id());
         this.currentActive.destroy();
         // 图片可能开启了缩放旋转，删除图片时一并销毁transformer
-        let transformer = this.konvaInstance.find("Transformer");
+        let transformer = konvaInstance.find("Transformer");
         if (transformer.length) transformer[0].destroy();
         this.currentActive = null;
       }

@@ -1,19 +1,23 @@
 <script setup>
 import Konva from "konva";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, provide } from "vue";
 import { debounce } from "lodash";
 import CanvasMaterial from "./CanvasMaterial.vue";
 import useKonvaStore from "../store/konvaStore";
-import { 
-  konvaDrawBackgroundImage,
-  konvaDrawBackgroundReact,
-  konvaDrawText, } from "@/utils";
 import { createKonva } from "@/utils/konvaInstance"
 
 
 const konvaStore = useKonvaStore();
 
-let konvaInstance = null // konva实例
+let konvaInstance =  ref(null) // konva实例
+/**
+ * 通过注入的方式将konvaInstance提供给到子组件
+ * 
+ * getKonvaInstance方法在子组件顶层执行时，会比createKonva函数先一步执行。
+ * 无法在子组件内声明顶层konvaInstance变量
+ */
+provide('konvaInstance', konvaInstance)
+
 let stageWidth = ref(413);
 let stageHeight = ref(582);
 const currentActive = computed(() => konvaStore.currentActive);
@@ -23,15 +27,15 @@ onMounted(() => {
 });
 
 function initKonva() {
-  konvaInstance = createKonva({
+  konvaInstance.value = createKonva({
     container: "konvaEditor-container",
     width: stageWidth.value,
     height: stageHeight.value,
   })
 
   let layer = new Konva.Layer();
-  konvaInstance.add(layer);
-  konvaInstance.on("click", function (e) {
+  konvaInstance.value.add(layer);
+  konvaInstance.value.on("click", function (e) {
     konvaStore.setCurrentActive(null);
     if (e.target instanceof Konva.Stage) return;
     if (e.target instanceof Konva.Rect) {
@@ -45,38 +49,18 @@ function initKonva() {
 // 修改画布宽度
 const stageWidthChange = debounce(function () {
   const stageWidthEle = document.getElementById("stageWidth");
-  konvaInstance.setAttr("width", +stageWidthEle.value);
+  konvaInstance.value.setAttr("width", +stageWidthEle.value);
 }, 500);
 
 // 修改画布高度
 const stageHeightChange = debounce(function () {
   const stageHeightEle = document.getElementById("stageHeight");
-  konvaInstance.setAttr("height", +stageHeightEle.value);
+  konvaInstance.value.setAttr("height", +stageHeightEle.value);
 }, 500);
-
-// 更新背景
-async function updateBackground(params) {
-  // 移除原背景
-  konvaStore.removeBackground("materialBackground");
-  let result = null;
-  if (params.bgType === "image") {
-    result = await konvaDrawBackgroundImage(konvaInstance, params.url);
-  } else if (params.bgType === "color") {
-    result = konvaDrawBackgroundReact(konvaInstance, params.color);
-  }
-  // 加进图层
-  konvaStore.pushDiagram(result);
-}
-
-// 绘制文本
-function insertTextFn(params) {
-  let result = konvaDrawText(konvaInstance, params);
-  konvaStore.unshiftDiagram(result);
-}
 
 // 将画布导出为图片
 function saveToImage() {
-  konvaInstance.toDataURL({
+  konvaInstance.value.toDataURL({
     quality: 1,
     // mimeType:'image/jpeg',
     pixelRatio: 3,
@@ -96,14 +80,16 @@ function saveToImage() {
   }
 }
 
+// 删除选中的图形
+function deleteDiagram(){
+  konvaStore.destroyDiagram(konvaInstance.value)
+}
 
 </script>
 
 <template>
   <div class="main-container">
-    <CanvasMaterial
-      @insert-text="insertTextFn"
-      @update-background="updateBackground" />
+    <CanvasMaterial />
     <div class="konva-editor">
       <div class="konva-editor__header">
         <div class="stage-wh">
@@ -132,7 +118,7 @@ function saveToImage() {
             title="删除选中的图形"
             :disabled="!currentActive"
             :class="!currentActive ? '' : 'icon-delete-active'"
-            @click="konvaStore.destroyDiagram"></span>
+            @click="deleteDiagram"></span>
         </div>
       </div>
       <div class="konva-editor__content">

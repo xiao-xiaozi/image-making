@@ -1,10 +1,11 @@
 <script setup>
-import { reactive, computed } from "vue";
+import { reactive, computed, inject } from "vue";
 import useKonvaStore from "@/store/konvaStore.js";
-import { debounce } from "lodash";
+import { debounce,uniqueId } from "lodash";
+import { getStageLayer } from "@/utils";
 
-const emit = defineEmits(["textClick"]);
 const konvaStore = useKonvaStore();
+const konvaInstance = inject("konvaInstance")
 
 const activeText = computed(() => konvaStore.activeText);
 const showInsertTextBtn = computed(() => {
@@ -70,12 +71,38 @@ const textChange = debounce((e) => {
 // 插入文本
 const fontFamilyClick = debounce(
   () => {
-    emit("textClick", konvaStore.activeText);
+    konvaDrawText(konvaStore.activeText)
     konvaStore.resetActiveText();
   },
   500,
   { leading: true, trailing: false }
 );
+
+function konvaDrawText(params) {
+  const kStore = useKonvaStore();
+  let layer = getStageLayer(konvaInstance.value);
+  let textNode = new Konva.Text({
+    x: 5,
+    y: 5,
+    text: params.text || "文本信息",
+    fontSize: params.fontSize || 16,
+    id: uniqueId("text_"),
+    fontFamily: params.fontFamily || "SimHei",
+    fill: params.fill || "#000",
+    draggable: true,
+  });
+  textNode.on("dblclick", function (e) {
+    kStore.setActiveText({ ...e.target.attrs, id: textNode.id() });
+    kStore.setActiveMaterial("text"); // 双击选中文本进行编辑时，将左侧菜单切换到文本
+  });
+  layer.add(textNode);
+  return {
+    value: textNode,
+    name: "文本信息",
+  };
+}
+
+
 </script>
 <template>
   <div class="material-text">

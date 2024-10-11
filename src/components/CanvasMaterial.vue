@@ -6,7 +6,6 @@ import LayerInfo from "./LayerInfo.vue";
 import MaterialImage from "./MaterialImage.vue";
 import useKonvaStore from "@/store/konvaStore.js";
 
-const emit = defineEmits(["updateBackground", "insertText", "insertImage"]);
 
 let konvaStore = useKonvaStore();
 
@@ -18,20 +17,6 @@ function materialTypeClick(e) {
   konvaStore.setActiveMaterial(material);
 }
 
-// 背景图片点击处理
-function materialBackgroundClick(params) {
-  emit("updateBackground", { url: params, bgType: "image" });
-}
-
-// 背景色更新处理
-function materialBgColor(params) {
-  emit("updateBackground", { ...params, bgType: "color" });
-}
-
-// 插入文本
-function textClickFn(params) {
-  emit("insertText", params);
-}
 </script>
 
 <template>
@@ -76,14 +61,10 @@ function textClickFn(params) {
     </div>
     <div class="material-content">
       <MaterialBackground
-        v-show="activeMaterial === 'background'"
-        @background-color="materialBgColor"
-        @material-background="materialBackgroundClick" />
+        v-show="activeMaterial === 'background'" />
       <MaterialText
-        v-show="activeMaterial === 'text'"
-        @text-click="textClickFn" />
+        v-show="activeMaterial === 'text'" />
       <LayerInfo v-show="activeMaterial === 'layer'" />
-      <!-- <MaterialImage v-show="activeMaterial === 'image'" /> -->
       <MaterialImage v-show="activeMaterial === 'image'" />
       <div
         v-show="activeMaterial === 'template' || activeMaterial === 'diagram'">
