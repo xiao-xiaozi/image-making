@@ -2,7 +2,7 @@
 import Konva from "konva";
 import { onMounted, ref, computed, provide } from "vue";
 import { debounce } from "lodash";
-import CanvasMaterial from "./CanvasMaterial.vue";
+import CanvasMaterial from "./CanvasMaterial/CanvasMaterial.vue";
 import useKonvaStore from "../store/konvaStore";
 import { createKonva } from "@/utils/konvaInstance"
 

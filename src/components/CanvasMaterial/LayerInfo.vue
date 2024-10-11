@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import useKonvaStore from "../store/konvaStore";
+import useKonvaStore from "@/store/konvaStore";
 
 const konvaStore = useKonvaStore();
 

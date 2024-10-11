@@ -1,5 +1,5 @@
 <script setup>
-import useKonvaStore from "../store/konvaStore";
+import useKonvaStore from "@/store/konvaStore";
 import windImage from "@/assets/image/wind.png";
 import sunImage from "@/assets/image/sun.png";
 import cloudyImage from "@/assets/image/cloudy.png";
