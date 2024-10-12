@@ -36,15 +36,15 @@ const useKonvaStore = defineStore("layerDiagram", {
         this.currentActive = null;
       }
     },
-    // 加到图层数组头部
+    // 加到图型数组头部
     unshiftDiagram(params) {
       this.diagramArray.unshift(params);
     },
-    // 加到图层数组尾部
+    // 加到图形数组尾部
     pushDiagram(params) {
       this.diagramArray.push(params);
     },
-    // 按id值删除, 更新图形信息
+    // 按id值删除图形, 更新图形信息
     removeDiagram(id) {
       let index = this.diagramArray.findIndex((el) => el.value.id() === id);
       if (index >= 0) this.diagramArray.splice(index, 1);

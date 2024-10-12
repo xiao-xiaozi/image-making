@@ -31,7 +31,8 @@ function imageChoose(e) { // 选择本地图片
 
 async function imageClick(url) {
   const result = await konvaDrawBackgroundImage(url)
-  konvaStore.pushDiagram(result); // 加进图层数组
+  konvaStore.pushDiagram(result); // 加进图形数组
+  konvaStore.setCurrentActive(result.value) // 设置当前选中
 }
 
 function konvaDrawBackgroundImage(imageUrl) {

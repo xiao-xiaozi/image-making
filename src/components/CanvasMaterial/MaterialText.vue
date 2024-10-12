@@ -82,6 +82,7 @@ const fontFamilyClick = debounce(
     const result = konvaDrawText(konvaStore.activeText)
     konvaStore.unshiftDiagram(result);
     konvaStore.resetActiveText();
+    konvaStore.setCurrentActive(result.value) // 设置当前选中值
   },
   500,
   { leading: true, trailing: false }

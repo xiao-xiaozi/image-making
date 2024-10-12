@@ -32,7 +32,8 @@ const imgClick = debounce(
       konvaInstance.value,
       imageArray[index]
     );
-    konvaStore.unshiftDiagram(result);
+    konvaStore.unshiftDiagram(result); // 加到图形数组中
+    konvaStore.setCurrentActive(result.value) // 设置当前选中
   },
   500,
   { leading: true, trailing: false }
