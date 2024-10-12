@@ -37,13 +37,29 @@ function initKonva() {
   konvaInstance.value.add(layer);
   konvaInstance.value.on("click", function (e) {
     konvaStore.setCurrentActive(null);
-    if (e.target instanceof Konva.Stage) return;
+    if (e.target instanceof Konva.Stage) {
+      destroyTransformer() // 销毁transformer
+      return
+    };
     if (e.target instanceof Konva.Rect) {
+      destroyTransformer() // 销毁transformer
       let { attrs } = e.target;
       if (attrs.name === "materialBackground") return;
     }
-    konvaStore.setCurrentActive(e.target);
+    konvaStore.setCurrentActive(e.target); // 设置当前选中的图形
   });
+}
+
+/**
+ * 销毁所有transformer
+ */
+function destroyTransformer(){
+  let transformers = konvaInstance.value.find("Transformer");
+  if(Array.isArray(transformers) && transformers.length) {
+    transformers.forEach(transformer => {
+      transformer.destroy()
+    })
+  }
 }
 
 // 修改画布宽度
@@ -172,6 +188,7 @@ function deleteDiagram(){
         padding: 10px;
         display: flex;
         justify-content: center;
+        position: relative; // 文本编辑时用于定位textarea的位置
         .konvajs-content {
           box-shadow: 1px 1px 9px 5px #ccc;
         }

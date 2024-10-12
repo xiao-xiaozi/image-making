@@ -1,5 +1,14 @@
 import Konva from "konva";
 import { defineStore, acceptHMRUpdate } from "pinia";
+import { cloneDeep } from "lodash"
+
+const defaultActiveText = {
+  fill: "#ffffff",
+  fontFamily: "",
+  text: "",
+  fontSize: 26,
+  id: null,
+}
 
 const useKonvaStore = defineStore("layerDiagram", {
   state: () => {
@@ -8,13 +17,7 @@ const useKonvaStore = defineStore("layerDiagram", {
       currentActive: null, // 当前konva点击选中的图形
       activeMaterial: "text", // 当前激活的左侧菜单
       // 当前选中的文本
-      activeText: {
-        fill: "#ffffff",
-        fontFamily: "",
-        text: "",
-        fontSize: 16,
-        id: null,
-      },
+      activeText: cloneDeep(defaultActiveText),
     };
   },
   actions: {
@@ -33,15 +36,15 @@ const useKonvaStore = defineStore("layerDiagram", {
         this.currentActive = null;
       }
     },
-    // 移除图层数组中的第一个图层
+    // 加到图层数组头部
     unshiftDiagram(params) {
       this.diagramArray.unshift(params);
     },
-    // 加进图层数组
+    // 加到图层数组尾部
     pushDiagram(params) {
       this.diagramArray.push(params);
     },
-    // 按id值删除, 更新图层信息
+    // 按id值删除, 更新图形信息
     removeDiagram(id) {
       let index = this.diagramArray.findIndex((el) => el.value.id() === id);
       if (index >= 0) this.diagramArray.splice(index, 1);
@@ -77,13 +80,7 @@ const useKonvaStore = defineStore("layerDiagram", {
       this.activeText[attr] = value;
     },
     resetActiveText() {
-      this.activeText = {
-        fill: "#ffffff",
-        fontFamily: "",
-        text: "",
-        fontSize: 16,
-        id: null,
-      };
+      this.activeText = cloneDeep(defaultActiveText)
     },
     // 设置当前激活的左侧菜单
     setActiveMaterial(val) {

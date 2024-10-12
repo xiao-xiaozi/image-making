@@ -6,22 +6,22 @@ import Konva from "konva";
  * @param {*} stage 
  * @param {*} node 
  */
-export function addToTransformer(stage, node) {
+export function addToTransformer(stage, node, transformerOptions = {}) {
   let transformer = stage.find("Transformer");
   if (transformer.length) {
     transformer[0].nodes([node]);
   } else {
-    const newTransformer = new Konva.Transformer();
+    const newTransformer = new Konva.Transformer(transformerOptions);
     let layer = getStageLayer(stage);
     layer.add(newTransformer);
     newTransformer.nodes([node]);
     layer.draw();
-    stage.on("click", function (e) {
-      // 点击stage 或 背景时 销毁destroy
-      let name = e.target.attrs.name;
-      if (e.target instanceof Konva.Stage || name === "materialBackground")
-        newTransformer.destroy();
-    });
+    // stage.on("click", function (e) {
+    //   // 点击stage 或 背景时 销毁destroy
+    //   let name = e.target.attrs.name;
+    //   if (e.target instanceof Konva.Stage || name === "materialBackground")
+    //     newTransformer.destroy();
+    // });
   }
 }
 
