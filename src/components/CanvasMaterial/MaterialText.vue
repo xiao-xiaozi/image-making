@@ -251,7 +251,7 @@ function konvaDrawText(params) {
 
   return {
     value: textNode,
-    name: "文本信息",
+    name: "text",
   };
 }
 
