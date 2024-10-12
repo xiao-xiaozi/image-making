@@ -1,7 +1,7 @@
 <script setup>
 import backgroundData from "@/assets/template";
 import { inject, reactive, ref } from "vue";
-import { debounce } from "lodash";
+import { debounce, uniqueId } from "lodash";
 import useKonvaStore from "@/store/konvaStore";
 import { getStageLayer } from "@/utils";
 import Konva from "konva";
@@ -18,8 +18,6 @@ let backgroundColor = ref("#ffffff");
 /**
  * 添加图片
  */
-
-
 function imageChoose(e) { // 选择本地图片
   var reader = new FileReader();
   reader.onload = function (e) {
@@ -29,10 +27,17 @@ function imageChoose(e) { // 选择本地图片
   reader.readAsDataURL(e.target.files[0]);
 }
 
-async function imageClick(url) {
-  const result = await konvaDrawBackgroundImage(url)
-  konvaStore.pushDiagram(result); // 加进图形数组
-  konvaStore.setCurrentActive(result.value) // 设置当前选中
+async function imageClick(e) {
+
+  const backgroundImageRect = konvaStore.diagramArray.find(el => el.name === 'backgroundImage')
+  if(backgroundImageRect) {
+    backgroundImageRect.value.image(e.target)
+  }else {
+    const result = await konvaDrawBackgroundImage(e.target.dataset.url)
+    konvaStore.pushDiagram(result); // 加进图形数组
+    konvaStore.setCurrentActive(result.value) // 设置当前选中
+  }
+
 }
 
 function konvaDrawBackgroundImage(imageUrl) {
@@ -44,7 +49,7 @@ function konvaDrawBackgroundImage(imageUrl) {
       yoda = new Konva.Image({
         x: 0,
         y: 0,
-        name: "materialBackground",
+        id: uniqueId('backgroundImage_'),
         image: imageObj,
         width: konvaInstance.value.width(),
         height: konvaInstance.value.height(),
@@ -53,8 +58,7 @@ function konvaDrawBackgroundImage(imageUrl) {
       yoda.moveToBottom(); // 将背景置于底层
       layer.batchDraw();
       resolve({
-        name: "materialBackground",
-        id: "materialBackground",
+        name: "backgroundImage",
         value: yoda,
       });
     };
@@ -69,9 +73,13 @@ function konvaDrawBackgroundImage(imageUrl) {
  */
 const colorInput = debounce(() => {
   let ele = document.getElementById("bg-color");
-  konvaStore.removeBackground("materialBackground");// 移除原背景
-  const result = konvaDrawBackgroundReact(ele.value) // 绘制
-  konvaStore.pushDiagram(result);// 加进图层数组
+  let backgroundColorRect = konvaStore.diagramArray.find(el => el.name === 'backgroundColor')
+  if(backgroundColorRect) { // 已有背景元素、更新颜色值
+    backgroundColorRect.value.fill(ele.value)
+  }else {
+    const result = konvaDrawBackgroundReact(ele.value) // 绘制
+    konvaStore.pushDiagram(result);// 加进图层数组
+  }
 
 }, 500);
 
@@ -80,7 +88,7 @@ function konvaDrawBackgroundReact(backgroundColor) {
   let rect = new Konva.Rect({
     x: 0,
     y: 0,
-    name: "materialBackground",
+    id: uniqueId('backgroundColor_'),
     fill: backgroundColor,
     width: konvaInstance.value.width(),
     height: konvaInstance.value.height(),
@@ -90,9 +98,8 @@ function konvaDrawBackgroundReact(backgroundColor) {
   rect.moveToBottom(); //将背景置于底层
   layer.draw();
   return {
-    name: "materialBackground",
+    name: "backgroundColor",
     value: rect,
-    id: "materialBackground",
   };
 }
 
@@ -114,9 +121,9 @@ function konvaDrawBackgroundReact(backgroundColor) {
       :key="url"
       :src="url"
       alt="item.name"
-      :data-template="url"
+      :data-url="url"
       class="material-background__item"
-      @click="imageClick(url)" />
+      @click="imageClick" />
     <!-- @click="$emit('materialBackground', url)" /> -->
   </div>
 </template>

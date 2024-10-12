@@ -44,22 +44,32 @@ const useKonvaStore = defineStore("layerDiagram", {
     pushDiagram(params) {
       this.diagramArray.push(params);
     },
-    // 按id值删除图形, 更新图形信息
-    removeDiagram(id) {
+    // 按id值删除指定图形, 更新图形信息
+    removeDiagramForID(id) {
       let index = this.diagramArray.findIndex((el) => el.value.id() === id);
       if (index >= 0) this.diagramArray.splice(index, 1);
     },
-    // 删除背景，如果有
-    removeBackground() {
-      let index = this.diagramArray.findIndex(
-        (el) => el.name == "materialBackground"
-      );
-      if (index >= 0) {
-        if (this.diagramArray[index].value)
-          this.diagramArray[index].value.destroy();
-        this.diagramArray.splice(index, 1);
+    // 按name值删除某一类图形
+    removeDiagramForName(name){
+      let diagramIndex = this.diagramArray.findIndex(el => el.name === name)
+      while(diagramIndex) {
+        this.diagramArray[diagramIndex].value.destroy() // 销毁图形
+        this.diagramArray.splice(diagramIndex,1) // 从数组中移除
+
+        diagramIndex = this.diagramArray.findIndex(el => el.anme === name)
       }
     },
+    // 删除背景，如果有
+    // removeBackground() {
+    //   let index = this.diagramArray.findIndex(
+    //     (el) => el.name == "materialBackground"
+    //   );
+    //   if (index >= 0) {
+    //     if (this.diagramArray[index].value)
+    //       this.diagramArray[index].value.destroy();
+    //     this.diagramArray.splice(index, 1);
+    //   }
+    // },
     // setActiveText 获取文本节点的信息
     setActiveText(params) {
       this.activeText.fill = params.fill || "#000";
