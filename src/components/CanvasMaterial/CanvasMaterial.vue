@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import MaterialBackground from "./MaterialBackground.vue";
 import MaterialText from "./MaterialText.vue";
-import LayerInfo from "./LayerInfo.vue";
+// import LayerInfo from "./LayerInfo.vue";
 import MaterialImage from "./MaterialImage.vue";
 import useKonvaStore from "@/store/konvaStore.js";
 
@@ -52,19 +52,20 @@ function materialTypeClick(e) {
         :class="activeMaterial == 'background' ? 'material-type__active' : ''">
         背景
       </div>
-      <div
+      <!-- docs: 不算是图层，是插入konva的图形/文本信息。当前Konva内的元素。 -->
+      <!-- <div
         class="type-item"
         data-material="layer"
         :class="activeMaterial == 'layer' ? 'material-type__active' : ''">
         图层
-      </div>
+      </div> -->
     </div>
     <div class="material-content">
       <MaterialBackground
         v-show="activeMaterial === 'background'" />
       <MaterialText
         v-show="activeMaterial === 'text'" />
-      <LayerInfo v-show="activeMaterial === 'layer'" />
+      <!-- <LayerInfo v-show="activeMaterial === 'layer'" /> -->
       <MaterialImage v-show="activeMaterial === 'image'" />
       <div
         v-show="activeMaterial === 'template' || activeMaterial === 'diagram'">
