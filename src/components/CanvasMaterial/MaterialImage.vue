@@ -6,6 +6,7 @@ import cloudyImage from "@/assets/image/cloudy.png";
 import { inject, reactive } from "vue";
 import { debounce } from "lodash";
 import { getStageLayer, addToTransformer } from "@/utils";
+import Konva from "konva";
 
 const konvaStore = useKonvaStore();
 
@@ -70,7 +71,13 @@ function konvaDrawImage(konvaStage, url) {
       <input type="file" accept="image/*" @input="imageChoose" />
     </div>
     <div class="image-content" @click="imgClick">
-      <img v-for="(url, index) in imageArray" :key="url" :src="url" :data-index="index" class="img" alt="wind" />
+      <img
+        v-for="(url, index) in imageArray"
+        :key="url"
+        :src="url"
+        :data-index="index"
+        class="img"
+        alt="wind" />
     </div>
   </div>
 </template>

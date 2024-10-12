@@ -4,6 +4,7 @@ import { inject, reactive, ref } from "vue";
 import { debounce } from "lodash";
 import useKonvaStore from "@/store/konvaStore";
 import { getStageLayer } from "@/utils";
+import Konva from "konva";
 
 const konvaStore = useKonvaStore()
 
@@ -101,10 +102,20 @@ function konvaDrawBackgroundReact(backgroundColor) {
       <input type="file" accept="image/*" @input="imageChoose" />
     </div>
     <div class="background-color">
-      <input id="bg-color" type="color" :value="backgroundColor" @input="colorInput" />
+      <input
+        id="bg-color"
+        type="color"
+        :value="backgroundColor"
+        @input="colorInput" />
     </div>
-    <img v-for="url in backgroundDataReactive" :key="url" :src="url" alt="item.name" :data-template="url"
-      class="material-background__item" @click="imageClick(url)" />
+    <img
+      v-for="url in backgroundDataReactive"
+      :key="url"
+      :src="url"
+      alt="item.name"
+      :data-template="url"
+      class="material-background__item"
+      @click="imageClick(url)" />
     <!-- @click="$emit('materialBackground', url)" /> -->
   </div>
 </template>
