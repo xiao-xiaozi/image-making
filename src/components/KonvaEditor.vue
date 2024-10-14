@@ -66,13 +66,30 @@ function destroyTransformer(){
 const stageWidthChange = debounce(function () {
   const stageWidthEle = document.getElementById("stageWidth");
   konvaInstance.value.setAttr("width", +stageWidthEle.value);
+
+  updateBackgroundRect()
 }, 500);
 
 // 修改画布高度
 const stageHeightChange = debounce(function () {
   const stageHeightEle = document.getElementById("stageHeight");
   konvaInstance.value.setAttr("height", +stageHeightEle.value);
+
+  updateBackgroundRect()
 }, 500);
+
+// 画布大小发生变化时，更新背景色/图的大小
+function updateBackgroundRect(){
+  const backgroundRect = konvaStore.diagramArray.filter(el => {
+    return el.name === 'backgroundImage' || el.name ==='backgroundColor'
+  })
+  if(backgroundRect.length) {
+    backgroundRect.forEach(rect => {
+      rect.value.width(konvaInstance.value.width())
+      rect.value.height(konvaInstance.value.height())
+    })
+  }
+}
 
 // 将画布导出为图片
 function saveToImage() {
