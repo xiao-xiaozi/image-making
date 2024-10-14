@@ -19,10 +19,15 @@ let konvaInstance =  ref(null) // konva实例
 provide('konvaInstance', konvaInstance)
 
 let stageWidth = ref(413);
-let stageHeight = ref(582);
+let stageHeight = ref(82);
 const currentActive = computed(() => konvaStore.currentActive);
 
 onMounted(() => {
+  // 画布盒子宽高
+  const bodyEle = document.body
+  stageHeight.value = bodyEle.clientHeight - 70
+  stageWidth.value = bodyEle.clientWidth - 420
+
   initKonva();
 });
 
