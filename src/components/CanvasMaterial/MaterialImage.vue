@@ -4,7 +4,7 @@ import windImage from "@/assets/image/wind.png";
 import sunImage from "@/assets/image/sun.png";
 import cloudyImage from "@/assets/image/cloudy.png";
 import { inject, reactive } from "vue";
-import { debounce } from "lodash";
+import { debounce, uniqueId } from "lodash";
 import { getStageLayer, addToTransformer } from "@/utils";
 import Konva from "konva";
 
@@ -47,7 +47,7 @@ function konvaDrawImage(konvaStage, url) {
       let kImg = new Konva.Image({
         x: 30,
         y: 50,
-        name: "image",
+        id: uniqueId('image_'),
         image: imageObj,
         draggable: true,
       });
@@ -57,7 +57,7 @@ function konvaDrawImage(konvaStage, url) {
       });
       layer.add(kImg);
       resolve({
-        name: "image",
+        type: "image",
         value: kImg,
       });
     };

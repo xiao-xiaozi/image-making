@@ -43,8 +43,10 @@ function initKonva() {
     };
     if (e.target instanceof Konva.Rect) {
       destroyTransformer() // 销毁transformer
-      let { attrs } = e.target;
-      if (attrs.name === "materialBackground") return;
+      // let { attrs } = e.target;
+      // if (attrs.name === "materialBackground") return;
+      // 调整背景元素的判断
+      if(e.target.id().startsWith('background')) return
     }
     konvaStore.setCurrentActive(e.target); // 设置当前选中的图形
   });
@@ -81,7 +83,7 @@ const stageHeightChange = debounce(function () {
 // 画布大小发生变化时，更新背景色/图的大小
 function updateBackgroundRect(){
   const backgroundRect = konvaStore.diagramArray.filter(el => {
-    return el.name === 'backgroundImage' || el.name ==='backgroundColor'
+    return el.type === 'backgroundImage' || el.type ==='backgroundColor'
   })
   if(backgroundRect.length) {
     backgroundRect.forEach(rect => {

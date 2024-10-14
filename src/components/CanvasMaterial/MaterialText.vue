@@ -251,7 +251,7 @@ function konvaDrawText(params) {
 
   return {
     value: textNode,
-    name: "text",
+    type: "text",
   };
 }
 

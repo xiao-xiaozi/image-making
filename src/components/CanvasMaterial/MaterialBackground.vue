@@ -29,7 +29,7 @@ function imageChoose(e) { // 选择本地图片
 
 async function imageClick(e) {
 
-  const backgroundImageRect = konvaStore.diagramArray.find(el => el.name === 'backgroundImage')
+  const backgroundImageRect = konvaStore.diagramArray.find(el => el.type === 'backgroundImage')
   if(backgroundImageRect) {
     backgroundImageRect.value.image(e.target)
   }else {
@@ -58,7 +58,7 @@ function konvaDrawBackgroundImage(imageUrl) {
       yoda.moveToBottom(); // 将背景置于底层
       layer.batchDraw();
       resolve({
-        name: "backgroundImage",
+        type: "backgroundImage",
         value: yoda,
       });
     };
@@ -73,7 +73,7 @@ function konvaDrawBackgroundImage(imageUrl) {
  */
 const colorInput = debounce(() => {
   let ele = document.getElementById("bg-color");
-  let backgroundColorRect = konvaStore.diagramArray.find(el => el.name === 'backgroundColor')
+  let backgroundColorRect = konvaStore.diagramArray.find(el => el.type === 'backgroundColor')
   if(backgroundColorRect) { // 已有背景元素、更新颜色值
     backgroundColorRect.value.fill(ele.value)
   }else {
@@ -98,7 +98,7 @@ function konvaDrawBackgroundReact(backgroundColor) {
   rect.moveToBottom(); //将背景置于底层
   layer.draw();
   return {
-    name: "backgroundColor",
+    type: "backgroundColor",
     value: rect,
   };
 }

@@ -21,14 +21,20 @@ const useKonvaStore = defineStore("layerDiagram", {
     };
   },
   actions: {
-    // konva.stage点击选中的图形
+    /**
+     * 当前点击选中的图形
+     * @param {Object} value 图形的实例
+     */
     setCurrentActive(value) {
       this.currentActive = value;
     },
-    // 销毁当前点击选中的图形
+    /**
+     * 销毁当前点击选中的图形
+     * @param {*} konvaInstance konva实例
+     */
     destroyDiagram(konvaInstance) {
       if (this.currentActive) {
-        this.removeDiagram(this.currentActive.id());
+        this.removeDiagramForID(this.currentActive.id()); // 将图形从图形数组移除
         this.currentActive.destroy();
         // 图片可能开启了缩放旋转，删除图片时一并销毁transformer
         let transformer = konvaInstance.find("Transformer");
@@ -36,41 +42,45 @@ const useKonvaStore = defineStore("layerDiagram", {
         this.currentActive = null;
       }
     },
-    // 加到图型数组头部
+    /**
+     * 插入到图型数组头部
+     * @param {Object} params { value:DiagramInstance,  type:"" }
+     */
     unshiftDiagram(params) {
       this.diagramArray.unshift(params);
     },
-    // 加到图形数组尾部
+    /**
+     * 插入到图形数组尾部
+     * @param {Object} params { value:DiagramInstance,  type:"" }
+     */
     pushDiagram(params) {
       this.diagramArray.push(params);
     },
-    // 按id值删除指定图形, 更新图形信息
+    /**
+     * 按id值删除指定图形, 更新图形信息
+     * @param {String} id 
+     */
     removeDiagramForID(id) {
       let index = this.diagramArray.findIndex((el) => el.value.id() === id);
       if (index >= 0) this.diagramArray.splice(index, 1);
     },
-    // 按name值删除某一类图形
-    removeDiagramForName(name){
-      let diagramIndex = this.diagramArray.findIndex(el => el.name === name)
+    /**
+     * 按 type 值移除diagramArray中的某一类图形
+     * @param {String} type 
+     */
+    removeDiagramForType(type){
+      let diagramIndex = this.diagramArray.findIndex(el => el.type === type)
       while(diagramIndex) {
         this.diagramArray[diagramIndex].value.destroy() // 销毁图形
         this.diagramArray.splice(diagramIndex,1) // 从数组中移除
 
-        diagramIndex = this.diagramArray.findIndex(el => el.anme === name)
+        diagramIndex = this.diagramArray.findIndex(el => el.type === type)
       }
     },
-    // 删除背景，如果有
-    // removeBackground() {
-    //   let index = this.diagramArray.findIndex(
-    //     (el) => el.name == "materialBackground"
-    //   );
-    //   if (index >= 0) {
-    //     if (this.diagramArray[index].value)
-    //       this.diagramArray[index].value.destroy();
-    //     this.diagramArray.splice(index, 1);
-    //   }
-    // },
-    // setActiveText 获取文本节点的信息
+    /**
+     * 设置当前选中文本节点的信息
+     * @param {*} params 
+     */
     setActiveText(params) {
       this.activeText.fill = params.fill || "#000";
       this.activeText.fontFamily = params.fontFamily || "";
@@ -78,7 +88,11 @@ const useKonvaStore = defineStore("layerDiagram", {
       this.activeText.text = params.text || "";
       this.activeText.id = params.id || null;
     },
-    // 更新当前文本节点属性值
+    /**
+     * 更新当前文本节点属性值
+     * @param {*} attr 
+     * @param {*} value 
+     */
     setTextAttr(attr, value) {
       let textNode = this.diagramArray.find(
         (el) => el.value.id() === this.activeText.id
@@ -89,10 +103,16 @@ const useKonvaStore = defineStore("layerDiagram", {
       // 更新值
       this.activeText[attr] = value;
     },
+    /**
+     * 重置当前选中文本节点的属性
+     */
     resetActiveText() {
       this.activeText = cloneDeep(defaultActiveText)
     },
-    // 设置当前激活的左侧菜单
+    /**
+     * 设置当前激活的左侧菜单
+     * @param {String} val 
+     */
     setActiveMaterial(val) {
       this.activeMaterial = val;
     },
